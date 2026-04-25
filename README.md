@@ -1,0 +1,2 @@
+# lotolab_mex
+mexican
