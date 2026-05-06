@@ -1,6 +1,86 @@
 {
     "MELATE": [
         {
+            "drawNumber": "4208",
+            "drawDate": "2026-05-03",
+            "balls": [
+                "13",
+                "19",
+                "22",
+                "32",
+                "52",
+                "54"
+            ],
+            "bonusBalls": [
+                "24"
+            ],
+            "prizeValue": "37000000"
+        },
+        {
+            "drawNumber": "4207",
+            "drawDate": "2026-05-01",
+            "balls": [
+                "19",
+                "25",
+                "35",
+                "37",
+                "41",
+                "45"
+            ],
+            "bonusBalls": [
+                "40"
+            ],
+            "prizeValue": "33200000"
+        },
+        {
+            "drawNumber": "4206",
+            "drawDate": "2026-04-29",
+            "balls": [
+                "12",
+                "14",
+                "30",
+                "44",
+                "48",
+                "56"
+            ],
+            "bonusBalls": [
+                "11"
+            ],
+            "prizeValue": "30800000"
+        },
+        {
+            "drawNumber": "4205",
+            "drawDate": "2026-04-26",
+            "balls": [
+                "8",
+                "14",
+                "19",
+                "26",
+                "27",
+                "32"
+            ],
+            "bonusBalls": [
+                "53"
+            ],
+            "prizeValue": "30700000"
+        },
+        {
+            "drawNumber": "4204",
+            "drawDate": "2026-04-24",
+            "balls": [
+                "4",
+                "7",
+                "15",
+                "17",
+                "19",
+                "22"
+            ],
+            "bonusBalls": [
+                "26"
+            ],
+            "prizeValue": "30600000"
+        },
+        {
             "drawNumber": "4203",
             "drawDate": "2026-04-22",
             "balls": [
@@ -67251,6 +67331,76 @@
     ],
     "REVANCHA": [
         {
+            "drawNumber": "4208",
+            "drawDate": "2026-05-03",
+            "balls": [
+                "6",
+                "7",
+                "26",
+                "27",
+                "30",
+                "40"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "77200000"
+        },
+        {
+            "drawNumber": "4207",
+            "drawDate": "2026-05-01",
+            "balls": [
+                "11",
+                "30",
+                "33",
+                "35",
+                "46",
+                "48"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "74300000"
+        },
+        {
+            "drawNumber": "4206",
+            "drawDate": "2026-04-29",
+            "balls": [
+                "4",
+                "18",
+                "24",
+                "27",
+                "45",
+                "53"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "71700000"
+        },
+        {
+            "drawNumber": "4205",
+            "drawDate": "2026-04-26",
+            "balls": [
+                "6",
+                "20",
+                "39",
+                "41",
+                "42",
+                "48"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "69400000"
+        },
+        {
+            "drawNumber": "4204",
+            "drawDate": "2026-04-24",
+            "balls": [
+                "4",
+                "15",
+                "29",
+                "43",
+                "44",
+                "46"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "66700000"
+        },
+        {
             "drawNumber": "4203",
             "drawDate": "2026-04-22",
             "balls": [
@@ -111982,6 +112132,76 @@
         }
     ],
     "REVANCHITA": [
+        {
+            "drawNumber": "4208",
+            "drawDate": "2026-05-03",
+            "balls": [
+                "26",
+                "34",
+                "40",
+                "41",
+                "47",
+                "56"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "28500000"
+        },
+        {
+            "drawNumber": "4207",
+            "drawDate": "2026-05-01",
+            "balls": [
+                "5",
+                "6",
+                "8",
+                "10",
+                "28",
+                "45"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "26500000"
+        },
+        {
+            "drawNumber": "4206",
+            "drawDate": "2026-04-29",
+            "balls": [
+                "6",
+                "26",
+                "36",
+                "38",
+                "39",
+                "49"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "24500000"
+        },
+        {
+            "drawNumber": "4205",
+            "drawDate": "2026-04-26",
+            "balls": [
+                "12",
+                "31",
+                "42",
+                "44",
+                "46",
+                "50"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "22900000"
+        },
+        {
+            "drawNumber": "4204",
+            "drawDate": "2026-04-24",
+            "balls": [
+                "7",
+                "12",
+                "14",
+                "17",
+                "30",
+                "33"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "21200000"
+        },
         {
             "drawNumber": "4203",
             "drawDate": "2026-04-22",
