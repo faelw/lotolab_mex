@@ -1,20 +1,58 @@
-import os
+import csv
 import json
+import os
 import requests
-import pandas as pd
-from io import StringIO
-import re
 
 # Configurações de Pastas e Arquivos
 DATA_DIR = "data"
 HISTORICO_FILE = f"{DATA_DIR}/historico_mexico.json"
 RESUMO_FILE = f"{DATA_DIR}/resumo_tela_principal.json"
 
-# Nomes dos jogos na ordem exata em que as tabelas aparecem no site oficial
-JOGOS_ORDEM = ["MELATE", "REVANCHA", "REVANCHITA"]
+# Seu Dicionário ORIGINAL, agora com as URLs oficiais dos CSVs do governo
+GAMES_CONFIG = {
+    "MELATE": {
+        "url": "https://www.loterianacional.gob.mx/Documentos/Historicos/Melate.csv",
+        "file": "Melate.csv",
+        "has_bonus": True,
+        "date_index": 10,
+        "bolsa_index": 9 
+    },
+    "REVANCHA": {
+        "url": "https://www.loterianacional.gob.mx/Documentos/Historicos/Revancha.csv",
+        "file": "Revancha.csv",
+        "has_bonus": False,
+        "date_index": 9,
+        "bolsa_index": 8
+    },
+    "REVANCHITA": {
+        "url": "https://www.loterianacional.gob.mx/Documentos/Historicos/Revanchita.csv",
+        "file": "Revanchita.csv",
+        "has_bonus": False,
+        "date_index": 9,
+        "bolsa_index": 8
+    }
+}
 
 def garantir_pastas():
     os.makedirs(DATA_DIR, exist_ok=True)
+
+def baixar_csvs_oficiais():
+    print("=== Baixando arquivos CSV oficiais da Lotería Nacional ===")
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+    
+    for game_name, config in GAMES_CONFIG.items():
+        try:
+            print(f"Baixando {game_name}...")
+            response = requests.get(config["url"], headers=headers, timeout=15)
+            response.raise_for_status()
+            
+            with open(config["file"], "wb") as f:
+                f.write(response.content)
+            print(f" [✓] {config['file']} baixado com sucesso.")
+        except Exception as e:
+            print(f" [!] Erro ao baixar {game_name}: {e}")
 
 def formatar_moeda(valor_str):
     try:
@@ -23,118 +61,81 @@ def formatar_moeda(valor_str):
     except:
         return "0,00"
 
-def main():
-    print("=== Iniciando atualização web (Melate, Revancha e Revanchita) ===")
-    garantir_pastas()
+def converter_csvs_para_json():
+    print("\n=== Iniciando processamento dos CSVs ===")
+    banco_final = {}
     
-    banco_final = {
-        "MELATE": [],
-        "REVANCHA": [],
-        "REVANCHITA": []
-    }
-    
-    # Carrega o histórico existente
-    if os.path.exists(HISTORICO_FILE):
-        with open(HISTORICO_FILE, "r", encoding="utf-8") as f:
-            try:
-                dados_carregados = json.load(f)
-                if isinstance(dados_carregados, dict):
-                    banco_final.update(dados_carregados)
-            except json.JSONDecodeError:
-                print("Aviso: JSON antigo vazio ou corrompido.")
-
-    # Busca a página que contém os 3 jogos
-    url_resultados = "https://www.loterianacional.gob.mx/Melate/Resultados"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    }
-    
-    try:
-        response = requests.get(url_resultados, headers=headers)
-        response.raise_for_status()
-        # Coleta todas as tabelas da página
-        tabelas = pd.read_html(StringIO(response.text))
-    except Exception as e:
-        print(f"[!] Erro ao raspar dados da página: {e}")
-        return
-
-    # Varre as tabelas usando a ordem mapeada
-    for i, nome_jogo in enumerate(JOGOS_ORDEM):
-        if i >= len(tabelas):
-            print(f"[!] Tabela para {nome_jogo} não encontrada na página.")
-            continue
-            
-        df_jogo = tabelas[i]
-        novos_resultados = []
+    for game_name, config in GAMES_CONFIG.items():
+        csv_file = config["file"]
+        has_bonus = config["has_bonus"]
+        idx_data = config["date_index"]
+        idx_bolsa = config["bolsa_index"]
         
-        for index, row in df_jogo.iterrows():
-            try:
-                linha = [str(x).strip() for x in row.values]
-                concurso = str(linha[0])
+        resultados = []
+        
+        try:
+            # Usando a mesma codificação (utf-8-sig) do seu script original
+            with open(csv_file, mode='r', encoding='utf-8-sig') as arquivo_csv:
+                leitor = csv.reader(arquivo_csv, delimiter=',') 
+                next(leitor, None) # Pula cabeçalho
                 
-                # Ignora linhas de cabeçalho duplicadas no meio da tabela HTML
-                if not concurso.isdigit():
-                    continue 
+                for linha in leitor:
+                    if not linha or len(linha) < 8:
+                        continue
                     
-                data_bruta = str(linha[1])
-                data_formatada = data_bruta
-                
-                # Formata a data
-                if "/" in data_bruta:
-                    partes = data_bruta.split("/")
-                    if len(partes) == 3:
-                        data_formatada = f"{partes[2]}-{partes[1]}-{partes[0]}"
+                    concurso = str(linha[1]).strip()
+                    if not concurso.isdigit():
+                        continue # Pula sujeiras e linhas em branco
                         
-                # Extrai os números (serve tanto para as 7 do Melate quanto as 6 da Revancha/Revanchita)
-                numeros_encontrados = []
-                for val in linha[2:]:
-                    numeros_encontrados.extend(re.findall(r'\d+', val))
+                    # Puxa e adiciona o '0' na frente se for número único (ex: '4' vira '04')
+                    bolas_principais = [str(x).strip().zfill(2) for x in linha[2:8]]
                     
-                bolas_principais = numeros_encontrados[:6] if len(numeros_encontrados) >= 6 else numeros_encontrados
-                bola_bonus = [numeros_encontrados[6]] if len(numeros_encontrados) >= 7 else []
+                    bola_bonus = []
+                    if has_bonus and len(linha) > 8:
+                        bola_bonus = [str(linha[8]).strip().zfill(2)]
+                        
+                    valor_bolsa = str(linha[idx_bolsa]).strip() if len(linha) > idx_bolsa else "0"
+                    data_bruta = str(linha[idx_data]).strip() if len(linha) > idx_data else ""
+                    
+                    data_formatada = data_bruta
+                    if "/" in data_bruta:
+                        partes = data_bruta.split("/")
+                        if len(partes) == 3:
+                            data_formatada = f"{partes[2]}-{partes[1]}-{partes[0]}"
+                            
+                    sorteio = {
+                        "drawNumber": concurso,
+                        "drawDate": data_formatada,
+                        "balls": bolas_principais,
+                        "bonusBalls": bola_bonus,
+                        "prizeValue": valor_bolsa
+                    }
+                    resultados.append(sorteio)
+                    
+            # Ordena do mais recente para o mais antigo
+            resultados = sorted(resultados, key=lambda x: int(x["drawNumber"]), reverse=True)
+            banco_final[game_name] = resultados
+            print(f" [✓] {len(resultados)} sorteios de {game_name} convertidos!")
+            
+            # Remove o arquivo CSV que foi baixado para não subir no GitHub
+            if os.path.exists(csv_file):
+                os.remove(csv_file)
                 
-                bolas_principais = [str(b).zfill(2) for b in bolas_principais]
-                bola_bonus = [str(b).zfill(2) for b in bola_bonus]
-                
-                # Fallback de bolsa pois as tabelas rápidas não mostram a premiação final
-                valor_bolsa = "0"
-                
-                sorteio = {
-                    "drawNumber": concurso,
-                    "drawDate": data_formatada,
-                    "balls": bolas_principais,
-                    "bonusBalls": bola_bonus,
-                    "prizeValue": valor_bolsa
-                }
-                novos_resultados.append(sorteio)
-            except Exception:
-                continue
-
-        # Verifica duplicidade para o jogo atual do loop
-        concursos_existentes = {
-            str(item.get("drawNumber")) 
-            for item in banco_final.get(nome_jogo, []) 
-            if isinstance(item, dict)
-        }
+        except Exception as e:
+            print(f" [!] Erro ao converter {game_name}: {e}")
+            
+    if banco_final:
+        with open(HISTORICO_FILE, "w", encoding="utf-8") as f:
+            json.dump(banco_final, f, indent=4, ensure_ascii=False)
+        print(f"\n✅ Banco Histórico unificado salvo em: {HISTORICO_FILE}")
         
-        for item in reversed(novos_resultados):
-            if item["drawNumber"] not in concursos_existentes:
-                banco_final[nome_jogo].insert(0, item)
-                
-        # Ordena a modalidade atualizada
-        banco_final[nome_jogo] = sorted(banco_final[nome_jogo], key=lambda x: int(x["drawNumber"]), reverse=True)
-        print(f"✅ {nome_jogo}: {len(novos_resultados)} últimos resultados validados da web.")
+    return banco_final
 
-    # Salva o arquivo final com todas as 3 modalidades
-    with open(HISTORICO_FILE, "w", encoding="utf-8") as f:
-        json.dump(banco_final, f, indent=4, ensure_ascii=False)
-    print(f"\n💾 Banco Histórico unificado salvo em: {HISTORICO_FILE}")
-
-    # Gera o resumo para a tela inicial abrangendo os 3 jogos
+def gerar_resumo_tela_principal(banco_completo):
     print("\n=== Gerando Resumo para a Tela Inicial ===")
     resumo = {}
 
-    for game_name, lista_sorteios in banco_final.items():
+    for game_name, lista_sorteios in banco_completo.items():
         resumo[game_name] = []
         ultimos_10 = lista_sorteios[:10]
 
@@ -145,7 +146,7 @@ def main():
                 "drawDate": draw.get("drawDate"),
                 "balls": draw.get("balls", []),
                 "bonusBalls": draw.get("bonusBalls", []),
-                "prizeValue": draw.get("prizeValue"),
+                "prizeValue": draw.get("prizeValue"), 
                 "prizeFormatted": f"${valor_formatado}" 
             }
             resumo[game_name].append(sorteio_enxuto)
@@ -153,8 +154,12 @@ def main():
     with open(RESUMO_FILE, "w", encoding="utf-8") as f:
         json.dump(resumo, f, indent=4, ensure_ascii=False)
         
-    print(f"💾 Resumo leve (10 últimos) salvo em: {RESUMO_FILE}")
-    print("\n🚀 Atualização de todos os jogos finalizada com sucesso!")
+    print(f"✅ Resumo leve (10 últimos) salvo em: {RESUMO_FILE}")
 
 if __name__ == "__main__":
-    main()
+    garantir_pastas()
+    baixar_csvs_oficiais()
+    banco_unificado = converter_csvs_para_json()
+    if banco_unificado:
+        gerar_resumo_tela_principal(banco_unificado)
+        print("\n🚀 Todos os dados atualizados a partir da fonte oficial do México!")
