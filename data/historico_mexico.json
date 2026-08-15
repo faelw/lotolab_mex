@@ -1,6 +1,22 @@
 {
     "MELATE": [
         {
+            "drawNumber": "4252",
+            "drawDate": "2026-08-14",
+            "balls": [
+                "07",
+                "08",
+                "19",
+                "28",
+                "46",
+                "53"
+            ],
+            "bonusBalls": [
+                "01"
+            ],
+            "prizeValue": "30100000"
+        },
+        {
             "drawNumber": "4251",
             "drawDate": "2026-08-12",
             "balls": [
@@ -68019,6 +68035,20 @@
     ],
     "REVANCHA": [
         {
+            "drawNumber": "4252",
+            "drawDate": "2026-08-14",
+            "balls": [
+                "04",
+                "06",
+                "16",
+                "40",
+                "44",
+                "49"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "56900000"
+        },
+        {
             "drawNumber": "4251",
             "drawDate": "2026-08-12",
             "balls": [
@@ -113422,6 +113452,20 @@
         }
     ],
     "REVANCHITA": [
+        {
+            "drawNumber": "4252",
+            "drawDate": "2026-08-14",
+            "balls": [
+                "12",
+                "23",
+                "25",
+                "27",
+                "34",
+                "53"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "114000000"
+        },
         {
             "drawNumber": "4251",
             "drawDate": "2026-08-12",
