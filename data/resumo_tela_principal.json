@@ -1,6 +1,23 @@
 {
     "MELATE": [
         {
+            "drawNumber": "4285",
+            "drawDate": "2026-10-30",
+            "balls": [
+                "16",
+                "19",
+                "22",
+                "36",
+                "51",
+                "55"
+            ],
+            "bonusBalls": [
+                "47"
+            ],
+            "prizeValue": "32900000",
+            "prizeFormatted": "$32.900.000,00"
+        },
+        {
             "drawNumber": "4284",
             "drawDate": "2026-10-28",
             "balls": [
@@ -152,26 +169,24 @@
             ],
             "prizeValue": "92000000",
             "prizeFormatted": "$92.000.000,00"
-        },
-        {
-            "drawNumber": "4275",
-            "drawDate": "2026-10-07",
-            "balls": [
-                "17",
-                "20",
-                "22",
-                "26",
-                "33",
-                "45"
-            ],
-            "bonusBalls": [
-                "32"
-            ],
-            "prizeValue": "87900000",
-            "prizeFormatted": "$87.900.000,00"
         }
     ],
     "REVANCHA": [
+        {
+            "drawNumber": "4285",
+            "drawDate": "2026-10-30",
+            "balls": [
+                "06",
+                "13",
+                "19",
+                "32",
+                "33",
+                "38"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "20600000",
+            "prizeFormatted": "$20.600.000,00"
+        },
         {
             "drawNumber": "4284",
             "drawDate": "2026-10-28",
@@ -306,24 +321,24 @@
             "bonusBalls": [],
             "prizeValue": "124300000",
             "prizeFormatted": "$124.300.000,00"
-        },
-        {
-            "drawNumber": "4275",
-            "drawDate": "2026-10-07",
-            "balls": [
-                "14",
-                "23",
-                "30",
-                "32",
-                "44",
-                "46"
-            ],
-            "bonusBalls": [],
-            "prizeValue": "120800000",
-            "prizeFormatted": "$120.800.000,00"
         }
     ],
     "REVANCHITA": [
+        {
+            "drawNumber": "4285",
+            "drawDate": "2026-10-30",
+            "balls": [
+                "03",
+                "18",
+                "27",
+                "32",
+                "34",
+                "42"
+            ],
+            "bonusBalls": [],
+            "prizeValue": "184200000",
+            "prizeFormatted": "$184.200.000,00"
+        },
         {
             "drawNumber": "4284",
             "drawDate": "2026-10-28",
@@ -458,21 +473,6 @@
             "bonusBalls": [],
             "prizeValue": "165200000",
             "prizeFormatted": "$165.200.000,00"
-        },
-        {
-            "drawNumber": "4275",
-            "drawDate": "2026-10-07",
-            "balls": [
-                "05",
-                "06",
-                "16",
-                "39",
-                "40",
-                "56"
-            ],
-            "bonusBalls": [],
-            "prizeValue": "162600000",
-            "prizeFormatted": "$162.600.000,00"
         }
     ]
 }
